@@ -1,58 +1,49 @@
 # General
-Simple C code to code a distance and remaining time program
+Simple pocktmine code for gamemode
   
-## Configuration
-```yaml
-#include <stdio.h>
+## Code
+```php
+<?php
 
-int main() {
+namespace KumaDev\SimpleGamemode;
 
-    int jamPergi, menitPergi, detikPergi; // Waktu keberangkatan
-    int jamJalan, menitJalan, detikJalan; // Waktu tempuh
-    int totalJam, totalMenit, totalDetik; // Variabel untuk menyimpan total waktu
+use pocketmine\plugin\PluginBase;
+use pocketmine\command\Command;
+use pocketmine\command\CommandSender;
+use pocketmine\player\Player;
+use pocketmine\player\GameMode;
 
-    // Menampilkan header untuk waktu keberangkatan
-    printf("-------------------------\n");
-    printf("|\tWaktu Pergi\t|\n");
-    printf("-------------------------\n");
+class Main extends PluginBase {
+    public function onEnable(): void {
+        $this->getLogger()->info("Plugin Telah Aktif");
+    }
 
-    // Menginput waktu keberangkatan
-    printf("Pergi Jam Berapa?: ");
-    scanf("%d", &jamPergi); // Input jam keberangkatan
-    printf("Menit Ke Berapa?: ");
-    scanf("%d", &menitPergi); // Input menit keberangkatan
-    printf("Detik Ke Berapa?: ");
-    scanf("%d", &detikPergi); // Input detik keberangkatan
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
+    {
+        if (!sender instanceof Player) return false;
 
-    // Menampilkan header untuk waktu tempuh
-    printf("\n-------------------------\n");
-    printf("|\tWaktu Tempuh\t|\n");
-    printf("-------------------------\n");
+        switch ($label) {
+            case "gma":
+                $sender->setGamemode(GameMode::ADVENTURE());
+                $sender->sendMessage("Mode Game Anda Sekarang Adalah Adventure");
+                break;
+            case "gmc":
+                $sender->setGamemode(GameMode::CREATIVE());
+                $sender->sendMessage("Mode Game Anda Sekarang Adalah Creative");
+                break;
+            case "gms":
+                $sender->setGamemode(GameMode::SURVIVAL());
+                $sender->sendMessage("Mode Game Anda Sekarang Adalah Survival");
+                break;
+            case "gmspc":
+                $sender->setGamemode(GameMode::SPECTATOR());
+                $sender->sendMessage("Mode Game Anda Sekarang Adalah Spectator");
+                break;
+            default:
+                return false;    
+        }
 
-    // Menginput waktu tempuh
-    printf("\nMenempuh Berapa Jam Di Jalan?: ");
-    scanf("%d", &jamJalan); // Input jam tempuh
-    printf("Menempuh Berapa Menit Di Jalan?: ");
-    scanf("%d", &menitJalan); // Input menit tempuh
-    printf("Menempuh Berapa Detik Di Jalan?: ");
-    scanf("%d", &detikJalan); // Input detik tempuh
-
-    // Menghitung total detik
-    totalDetik = (detikPergi + detikJalan);
-    int sisaDetik = totalDetik % 60; // Menghitung sisa detik setelah dibagi 60
-
-    // Menghitung total menit
-    totalMenit = (menitPergi + menitJalan + totalDetik / 60);
-    int sisaMenit = totalMenit % 60; // Menghitung sisa menit setelah dibagi 60
-
-    // Menghitung total jam
-    totalJam = (jamPergi + jamJalan + totalMenit / 60);
-    int sisaJam = totalJam % 24; // Menghitung sisa jam setelah dibagi 24
-
-    // Menampilkan hasil waktu perjalanan
-    printf("Maka pak synyster akan menempuh waktu perjalanan selama: %d jam, %d menit, %d detik\n", jamJalan, menitJalan, detikJalan);
-    printf("Dan pak synyster akan sampai di tempat tujuan pada jam %d menit ke-%d detik ke-%d\n", sisaJam, sisaMenit, sisaDetik);
-    
-    return 0;
+        return true;
+    }
 }
 ```
